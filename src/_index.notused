@@ -1,0 +1,15 @@
+import {h,render} from 'preact';
+
+import App from './components/app';
+
+
+document.querySelector('#app')
+// const rootelment = document.getElementById('app') || document.body;
+// rootelment.innerHTML = '';
+
+const rootelment = document.querySelector('#app')
+debugger;
+render (
+    <App {name="Hello World"} />,
+     rootelment
+)

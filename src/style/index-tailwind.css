@@ -1,0 +1,27 @@
+  /* @tailwind base;
+ @tailwind components;
+ @tailwind utilities;   */
+
+:host {
+    --space: 20%;
+    --space-xs: calc(var(--space) / 3);
+    --space-sm: calc(var(--space) / 2);
+    --space-md: calc(var(--space) * 2);
+    --offset: var(--space);
+  }
+
+  
+:host(:golobal(.az-social)) {
+    --tw-bg-opacity: 1;
+    background-color: rgba(107, 114, 128, var(--tw-bg-opacity));
+}
+
+
+:host(.az-social.visible) {
+    visibility: visible;
+}
+
+
+:host(.az-social.invisible) {
+    visibility: hidden;
+}

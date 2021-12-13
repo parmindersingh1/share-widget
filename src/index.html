@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>Getting Started</title>
+  <!-- <link rel="stylesheet" href="cookie-consent.css" /> -->
+  <script type="text/javascript" src="bundle.js"></script>
+</head>
+
+<body>
+  <!-- <script src="./dist/main.js"></script> -->
+  <script type="text/javascript">
+
+    var option = {
+      logobase64: "",
+      frequency: {
+        seconds: 10,
+        pageview: 10
+      },
+      backgrounColor: "black",
+      bodyText: 'for the latest Adzapier Announcement Foolow us on Twitter',
+      socials: {
+        twitter: {
+          twitterLink: "https://twitter.com/intent/follow?screen_name=adzapier&utm_campaign=adzapier",
+          text: 'fllow os on twitter',
+          buttonColor: 'blue',
+        },
+        facebook: {
+          twitterLink: "https://www.facebook.com/Adzapier/",
+          text: 'fllow os on Facebook',
+          buttonColor: 'green',
+        },
+        linkdin: {
+          twitterLink: "https://www.linkedin.com/company/adzapier/",
+          text: 'fllow os on Facebook',
+          buttonColor: 'red',
+        },
+      },
+      thankyou: 'Thank you for subscribing!'
+
+    }
+    // window.CookieConsent.init(option)
+  </script>
+
+<div style="min-height: 50px;">
+
+</div>
+  <h1>Website Body</h1>
+  
+
+  
+  <button id="toggleButn">Open Modal</button>
+  <script>
+
+    window.AZSocial.init({
+      type:"sidebar", //banner,sidebar,bottom
+      display: true,
+      body: "My body"
+    })
+    window.AZSocial.show();
+
+    var btn = document.getElementById("toggleButn");
+
+    let loggle = true;
+    btn.onclick = function () {
+      loggle = !loggle
+      if (loggle) {
+        window.AZSocial.show();
+      } else {
+        window.AZSocial.hide();
+      }
+    }
+
+  </script>
+</body>
+
+</html>
