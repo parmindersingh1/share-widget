@@ -4,14 +4,8 @@ import { EventEmitter } from 'events';
 import { Config } from '../types';
 
 import { setVisible } from '../utils/dom'
-
-
-
 import './app.module.scss';
-import Banner from './banner/banner';
-import SideBar from './sidebar/sidebar';
-import Bottom from './bottom/bottom';
-// import '../style/index.css';
+import {NewsLetterPopUpComponent} from './NewsLetter-PopUp-component';
 
 interface AppProps extends Config {
     containerClassName: string,
@@ -21,16 +15,29 @@ interface AppProps extends Config {
 // Types for state
 type ExpandableState = {
     containerClassName?: string,
+    configuration?: any,
     toggled: boolean,
 };
 
 
-class App extends Component<AppProps, ExpandableState> {
+class App extends Component<any, ExpandableState> {
     private containerClassName: string;
-    constructor(props: AppProps) {
+    constructor(props: any) {
         super(props);
+        let configurationRefactor = {
+                Validation: {}
+        }
+        props.Configuration.Form.Validation.map(item => {
+            configurationRefactor.Validation[item.key] = {
+                display: item.display,
+                required: item.required,
+                minLength: item.minLength,
+                maxLength: item.maxLength,
+            }
+        })
+        props.Configuration.Form = configurationRefactor
         this.state = {
-            containerClassName: props.containerClassName,
+            configuration: props,
             toggled: true,
         }
 
@@ -48,41 +55,15 @@ class App extends Component<AppProps, ExpandableState> {
 
     render() {
 
-        if (this.props.type=="sidebar"){
-            return (
-                <SideBar></SideBar>
-            )    
-        }
-        if (this.props.type=="banner"){
-            return (
-                <Banner 
-                toggled={this.state.toggled}
-                config={this.props}
-                handleClick  = {this.handleClick}
-              />
-            )    
-        }if (this.props.type=="bottom"){
-            return (
-                <Bottom 
-                toggled={this.state.toggled}
-                config={this.props}
-                handleClick  = {this.handleClick}
-              />
-            )    
-        }else{
         return (
             <Fragment>
-             <Banner 
-                toggled={this.state.toggled}
-                config={this.props}
-                handleClick  = {this.handleClick}
-              />
-              <SideBar></SideBar>
+                <div class="font-sans">
+                    <NewsLetterPopUpComponent configurationData={this.state.configuration} />
+                </div>
             </Fragment>
             )
                 
         }
-    }
 
 }
 

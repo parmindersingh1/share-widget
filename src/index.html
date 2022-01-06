@@ -2,77 +2,206 @@
 <html>
 
 <head>
-  <meta charset="utf-8" />
-  <title>Getting Started</title>
-  <!-- <link rel="stylesheet" href="cookie-consent.css" /> -->
-  <script type="text/javascript" src="bundle.js"></script>
+    <meta charset="utf-8"/>
+    <title>Getting Started</title>
+    <!-- <link rel="stylesheet" href="cookie-consent.css" /> -->
+    <script type="text/javascript" src="bundle.js"></script>
+
 </head>
 
 <body>
-  <!-- <script src="./dist/main.js"></script> -->
-  <script type="text/javascript">
+<!-- <script src="./dist/main.js"></script> -->
+<script type="text/javascript">
 
     var option = {
-      logobase64: "",
-      frequency: {
-        seconds: 10,
-        pageview: 10
-      },
-      backgrounColor: "black",
-      bodyText: 'for the latest Adzapier Announcement Foolow us on Twitter',
-      socials: {
-        twitter: {
-          twitterLink: "https://twitter.com/intent/follow?screen_name=adzapier&utm_campaign=adzapier",
-          text: 'fllow os on twitter',
-          buttonColor: 'blue',
+        logobase64: '',
+        frequency: {
+            seconds: 10,
+            pageview: 10
         },
-        facebook: {
-          twitterLink: "https://www.facebook.com/Adzapier/",
-          text: 'fllow os on Facebook',
-          buttonColor: 'green',
+        backgrounColor: 'black',
+        bodyText: 'for the latest Adzapier Announcement Foolow us on Twitter',
+        socials: {
+            twitter: {
+                twitterLink: 'https://twitter.com/intent/follow?screen_name=adzapier&utm_campaign=adzapier',
+                text: 'fllow os on twitter',
+                buttonColor: 'blue',
+            },
+            facebook: {
+                twitterLink: 'https://www.facebook.com/Adzapier/',
+                text: 'fllow os on Facebook',
+                buttonColor: 'green',
+            },
+            linkdin: {
+                twitterLink: 'https://www.linkedin.com/company/adzapier/',
+                text: 'fllow os on Facebook',
+                buttonColor: 'red',
+            },
         },
-        linkdin: {
-          twitterLink: "https://www.linkedin.com/company/adzapier/",
-          text: 'fllow os on Facebook',
-          buttonColor: 'red',
-        },
-      },
-      thankyou: 'Thank you for subscribing!'
+        thankyou: 'Thank you for subscribing!'
 
     }
     // window.CookieConsent.init(option)
-  </script>
+</script>
 
-<div style="min-height: 50px;">
+<!--<div style="min-height: 50px;">-->
 
-</div>
-  <h1>Website Body</h1>
-  
+<!--</div>-->
+<!--  <h1>Website Body</h1>-->
 
-  
-  <button id="toggleButn">Open Modal</button>
-  <script>
 
-    window.AZSocial.init({
-      type:"sidebar", //banner,sidebar,bottom
-      display: true,
-      body: "My body"
-    })
+<!--  <button id="toggleButn">Open Modal</button>-->
+<script>
+    var NewsLetterConfiguration = {
+        Configuration: {
+            'Form': {
+                'Validation': [{
+                    'key': 'first_Name',
+                    'display': true,
+                    'required': true,
+                    'minLength': 3,
+                    'maxLength': 14
+                }, {
+                    'key': 'last_Name',
+                    'display': true,
+                    'required': true,
+                    'minLength': 3,
+                    'maxLength': 12
+                }, {
+                    'key': 'city',
+                    'display': true,
+                    'required': true,
+                    'minLength': 3,
+                    'maxLength': 8
+                }, {
+                    'key': 'country',
+                    'display': true,
+                    'required': true,
+                    'minLength': 3,
+                    'maxLength': 9
+                }, {
+                    'key': 'zip_Code',
+                    'display': true,
+                    'required': true,
+                    'minLength': 5,
+                    'maxLength': 6
+                }, {
+                    'key': 'email',
+                    'display': true,
+                    'required': true,
+                    'emailValidation': null
+                }, {'key': 'privacy_Policy', 'display': true, 'required': true}]
+            },
+            'Layout': {
+                'HeaderBackgroundColor': '#010e20',
+                'HeaderTextColor': '#ffffff',
+                'BorderColor': '#2196F3',
+                'BodyBackgroundColor': '#010e20',
+                'BodyTextColor': '#ffffff',
+                'SubscribeButtonBackgroundColor': '#92c6fd',
+                'SubscribeButtonTextColor': '#222222',
+                'ThemeType': 'dark'
+            },
+            'Branding': {'CompanyLogo': null},
+            'BasicConfig': {'WaterMark': true, 'BoxedType': 'left-bottom'},
+            'LanguagesConfig': {
+                'LanguageData': {
+                    'enUS': {
+                        'city': 'City',
+                        'country': 'Country',
+                        'description': 'Stay In The Loop!',
+                        'email': 'Email address',
+                        'firstName': 'First name',
+                        'lastName': 'Last name',
+                        'poweredByText': 'Powered by',
+                        'privacyPolicy': ' Privacy Policy',
+                        'privacyText': 'I agree to the',
+                        'subscribeButtonText': 'Subscribe',
+                        'termAndCondition': 'Terms and Conditions ',
+                        'title': 'Join Our Newsletter',
+                        'zipCode': 'Zip Code'
+                    },
+                    'itIT': {
+                        'SubscribeButtonText': 'Subscribe',
+                        'city': 'CittÃ ',
+                        'country': 'Nazione',
+                        'description': 'Rimani nel giro!',
+                        'email': 'Indirizzo email',
+                        'firstName': 'Nome di battesimo',
+                        'lastName': 'Cognome',
+                        'poweredByText': 'Powered by',
+                        'privacyPolicy': 'politica sulla riservatezza',
+                        'privacyText': 'sono d\'accordo con',
+                        'termAndCondition': 'Termini e Condizioni',
+                        'title': 'Iscriviti alla nostra newsletter',
+                        'zipCode': 'Cap'
+                    },
+                    'zhCN': {
+                        'SubscribeButtonText': 'è®¢é˜…',
+                        'city': 'åŸŽå¸‚',
+                        'country': 'å›½å®¶',
+                        'description': 'ç•™åœ¨å¾ªçŽ¯ä¸­ï¼',
+                        'email': 'ç”µå­é‚®ä»¶åœ°å€',
+                        'firstName': 'å',
+                        'lastName': 'å§“',
+                        'poweredByText': 'ä¾›ç”µ',
+                        'privacyPolicy': ' éšç§æ”¿ç­–',
+                        'privacyText': 'æˆ‘åŒæ„',
+                        'termAndCondition': 'æ¡æ¬¾å’Œæ¡ä»¶ ',
+                        'title': 'åŠ å…¥æˆ‘ä»¬çš„é€šè®¯',
+                        'zipCode': 'é‚®æ”¿ç¼–ç '
+                    }
+                },
+                'CustonLang': [],
+                'AllowedLang': [{
+                    'code': 'enUS',
+                    'countryFlag': 'us',
+                    'title': 'English (United States)'
+                }, {'code': 'itIT', 'countryFlag': 'it', 'title': 'Italian (Italy)'}, {
+                    'code': 'zhCN',
+                    'countryFlag': 'cn',
+                    'title': 'Chinese (PRC)'
+                }],
+                'DefaultLanguage': 'zhCN'
+            },
+            'Links': {'TermAndConditionLink': 'test.cpom', 'PrivacyLink': 'test.com'},
+            'DisplayFrequency': {'DisplayClosedConsent': 10, 'DisplayClosedConsentType': 'pageViews'}
+        },
+        PropId: 'd5511f97-bd8f-46cd-b897-d5bd8e0bda5a',
+        OrgId: '56dd7f70-079d-42ca-9edb-cee54730aa08',
+        LokiConfiguration: {
+            app: 'newsletter-develop',
+            env: 'develop',
+        },
+        EnvConfig: {
+            ApiBaseUrl: 'http://localhost:8888/api/v1',
+            EndPoint: '/consent-preference/newsletter/:pid',
+            Env: 'local'
+        }
+    };
+    window.AZSocial.init(NewsLetterConfiguration)
     window.AZSocial.show();
+    // window.AZSocial.init({
+    //   type:"sidebar", //banner,sidebar,bottom
+    //   display: true,
+    //   body: "My body"
+    // })
+    // window.AZSocial.show();
 
-    var btn = document.getElementById("toggleButn");
+    var btn = document.getElementById('toggleButn');
 
     let loggle = true;
     btn.onclick = function () {
-      loggle = !loggle
-      if (loggle) {
-        window.AZSocial.show();
-      } else {
-        window.AZSocial.hide();
-      }
+        loggle = !loggle
+        if (loggle) {
+            window.AZSocial.show();
+        } else {
+            window.AZSocial.hide();
+        }
     }
 
-  </script>
+</script>
+
 </body>
 
 </html>
