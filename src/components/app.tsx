@@ -56,12 +56,12 @@ class App extends Component<any, ExpandableState> {
     }
 
     render() {
-
         return (
             <Fragment>
+                {!this.state.configuration.Configuration.BasicConfig?.MutePopup ?
                 <div class="font-sans">
                     <NewsLetterPopUpComponent configurationData={this.state.configuration} />
-                </div>
+                </div> : null}
             </Fragment>
             )
                 

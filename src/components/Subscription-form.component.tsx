@@ -320,6 +320,7 @@ export default class SubscriptionFormComponent extends Component<any, any> {
                         </div>
                     </div>
                 </div>
+                {config?.privacy_Policy?.display ?
                 <div class="flex sm:ml-8 items-start">
                     <div class="flex items-center h-5">
                         <input id="candidates" onChange={($event) => this.handleChange($event, 'privacyPolicy')} name="candidates" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" />
@@ -328,7 +329,7 @@ export default class SubscriptionFormComponent extends Component<any, any> {
                         <label for="candidates" class="font-medium text-gray-700">{content?.privacyText} <a target="_blank" href={this.props.configurationData.Configuration?.Links?.TermAndConditionLink}>{content?.termAndCondition}</a> &
                             <a target="_blank" href={this.props.configurationData.Configuration?.Links?.PrivacyLink}>{content?.privacyPolicy}</a></label>
                     </div>
-                </div>
+                </div> : null}
                 <div style={{marginLeft: '70px'}} class="col-span-12">
                     {errors.privacyPolicy.error  && submitted ?
                         <p style={{fontSize: '10px'}} className="text-red-600  sm:m-0 error-message">{errors.privacyPolicy.message}</p> : null}
