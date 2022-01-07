@@ -6,6 +6,8 @@ import { Config } from '../types';
 import { setVisible } from '../utils/dom'
 import './app.module.scss';
 import {NewsLetterPopUpComponent} from './NewsLetter-PopUp-component';
+import '../style/Index-tailwind.css'
+import './Style.css'
 
 interface AppProps extends Config {
     containerClassName: string,

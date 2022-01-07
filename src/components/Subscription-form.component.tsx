@@ -72,7 +72,7 @@ export default class SubscriptionFormComponent extends Component<any, any> {
                     message: 'This Field is required'
                 },
                 privacyPolicy: {
-                    error: validationConfig.privacyPolicy?.required && validationConfig.privacyPolicy?.display,
+                    error: validationConfig.privacy_Policy?.required && validationConfig.privacy_Policy?.display,
                     message: 'This Field is required'
                 }
             }
@@ -168,9 +168,9 @@ export default class SubscriptionFormComponent extends Component<any, any> {
                 errors.email.message = '';
                 values.email = email
             }
-        }  else if (field === 'privacyPolicy' && config.privacyPolicy?.display) {
+        }  else if (field === 'privacyPolicy' && config.privacy_Policy?.display) {
             const privacyPolicy = e.target.checked
-            if (!privacyPolicy && config.privacyPolicy?.required) {
+            if (!privacyPolicy && config.privacy_Policy?.required) {
                 errors.privacyPolicy.error = true;
                 errors.privacyPolicy.message = 'This field is required'
             } else {
@@ -255,6 +255,7 @@ export default class SubscriptionFormComponent extends Component<any, any> {
         const config: any = this.props.configurationData.Configuration.Form.Validation;
         const layoutConfig: any = this.props.configurationData.Configuration.Layout;
         const content = this.props?.content;
+        console.log('content', content)
         return (
             <Fragment>
             <form onSubmit={this.handleSubmit}>
@@ -336,7 +337,7 @@ export default class SubscriptionFormComponent extends Component<any, any> {
                     <button style={{color: layoutConfig.SubscribeButtonTextColor, backgroundColor:layoutConfig.SubscribeButtonBackgroundColor, }} type="submit" class="cursor-pointer mt-3 w-48 inline-flex justify-center rounded-md border border-blue-300
                             shadow-sm px-4 py-2 bg-blue-300 text-base font-medium text-gray-700 hover:bg-red-700
                             focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:text-sm">
-                        {content?.SubscribeButtonText}
+                        {content?.subscribeButtonText}
                     </button>
                 </div>
             </form>

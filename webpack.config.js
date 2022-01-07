@@ -3,6 +3,7 @@ const webpack = require("webpack");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CompressionPlugin = require("compression-webpack-plugin");
 
 module.exports = {
   entry: "./src/lib.tsx",
@@ -59,24 +60,8 @@ module.exports = {
         ],
       },
       {
-        test: /\.(css)$/,
-        exclude: /node_modules/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          "style-loader",        
-          {
-            loader: "css-loader",
-            options:{
-               import:true,
-               modules:true,
-               sourceMap: true,
-               importLoaders: 2,
-                // localIdentName: '[sha1:hash:hex:4]'
-              
-          }
-          },
-          'postcss-loader',  
-        ],
+        test: /\.css$/i,
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
       },
       {
         test: /\.(woff|woff2|eot|ttf|svg)$/,
@@ -91,7 +76,9 @@ module.exports = {
       template: "./src/index.html",
     }),
     new MiniCssExtractPlugin({
-      filename: "cookie-consent.css",
+      filename: "az-consent-preference-style.css",
+    }),
+    new CompressionPlugin({algorithm: "gzip"
     }),
     new webpack.HotModuleReplacementPlugin(),
     new CleanWebpackPlugin(),

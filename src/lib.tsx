@@ -19,21 +19,17 @@ export const configure = (conf: Config) => {
     container.className =  'az-social';
     // container.style.display = 'none';
     const shadowRoot = container.attachShadow({ mode: 'open' });
-    let css: HTMLStyleElement | HTMLLinkElement;
+    // let css: HTMLStyleElement | HTMLLinkElement;
     let css2: HTMLStyleElement | HTMLLinkElement;
     if (process.env.NODE_ENV === 'development') {
-
-        css = document.createElement('link');
-        css.setAttribute('rel', 'stylesheet');
-        css.setAttribute('href', 'cookie-consent.css');
-
         css2 = document.createElement('link');
         css2.setAttribute('rel', 'stylesheet');
-        css2.setAttribute('href', 'assets/index-tailwind.css');
-        
-        
+        css2.setAttribute('href', 'https://staging-cdn.adzapsrv.com/consent-preference/newsletter-bundle/develop/az-consent-preference-style.css');
+    } else {
+        css2 = document.createElement('link');
+        css2.setAttribute('rel', 'stylesheet');
+        css2.setAttribute('href', 'https://staging-cdn.adzapsrv.com/consent-preference/newsletter-bundle/develop/az-consent-preference-style.css');
     }
-    shadowRoot.appendChild(css);
     shadowRoot.appendChild(css2);
 
     const previousInstance = document.querySelector('.az-social' ) as HTMLElement;

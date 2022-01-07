@@ -85,7 +85,7 @@ export class NewsLetterPopUpComponent extends Component<any, any> {
             content = this.props.configurationData.Configuration?.LanguagesConfig?.LanguageData[defaultLanguage];
         }
         const languageList = this.props.configurationData.Configuration.LanguagesConfig.AllowedLang;
-        console.log('content', languageList)
+        console.log('content',  (config.BasicConfig?.BoxedType !== 'bottom-left' || config.BasicConfig?.BoxedType !== 'bottom-right') && config.BasicConfig?.BoxedType !== 'center')
         return (
             <Fragment>
                 {!consent ?
@@ -96,8 +96,10 @@ export class NewsLetterPopUpComponent extends Component<any, any> {
                        config.BasicConfig?.BoxedType === 'center' ? `flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0 ` : null
                     }>
                         <div style={{marginTop: config.BasicConfig?.BoxedType !== 'center' ? '0px' : null,
-                            position: config.BasicConfig?.BoxedType !== 'bottom-left' || config.BasicConfig?.BoxedType !== 'bottom-right' ? 'fixed' : null,
-                            bottom: config.BasicConfig?.BoxedType !== 'bottom-left' || config.BasicConfig?.BoxedType !== 'bottom-right' ? '0px' : null,
+                            position: (config.BasicConfig?.BoxedType !== 'bottom-left' || config.BasicConfig?.BoxedType !== 'bottom-right') && config.BasicConfig?.BoxedType !== 'center' ? 'fixed' : null,
+                            bottom: (config.BasicConfig?.BoxedType === 'bottom-left' || config.BasicConfig?.BoxedType === 'bottom-right') && config.BasicConfig?.BoxedType !== 'center' ? '0px' : null,
+                            top: (config.BasicConfig?.BoxedType === 'top-left' || config.BasicConfig?.BoxedType === 'top-right') && config.BasicConfig?.BoxedType !== 'center' ? '10px' : null,
+                            right: (config.BasicConfig?.BoxedType === 'top-right' || config.BasicConfig?.BoxedType === 'bottom-right') && config.BasicConfig?.BoxedType !== 'center' ? '10px' : null,
                         }}
                             class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                             <div style={{backgroundColor: config.Layout?.HeaderBackgroundColor}}
@@ -110,7 +112,7 @@ export class NewsLetterPopUpComponent extends Component<any, any> {
                                     </select>
                                 </div>
                                 <div className="float-right cursor-pointer" onClick={this.onOptOut}>
-                                    <svg style={{color: config.Layout?.HeaderTextColor}} xmlns="http://www.w3.org/2000/svg"
+                                    <svg style={{color: config.Layout?.HeaderTextColor, height: '1.5rem', width: '1.5rem'}} xmlns="http://www.w3.org/2000/svg"
                                          class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                               d="M6 18L18 6M6 6l12 12"/>
@@ -136,7 +138,7 @@ export class NewsLetterPopUpComponent extends Component<any, any> {
                                     </div>
                                 </div>
                             </div>
-                            <div style={{backgroundColor: config.Layout?.BodyBackgroundColor, borderTop: `3px solid ${config.Layout?.BodyTextColor}`}}
+                            <div style={{backgroundColor: config.Layout?.BodyBackgroundColor, borderTop: `3px solid ${config.Layout?.BodyTextColor}`, paddingBottom: '2.25rem'}}
                                  class="bg-red-200 px-4 py-5">
                                 <SubscriptionFormComponent hideNewsletter={this.hideNewsletter} content={content} configurationData={this.props.configurationData}/>
                                 {config.BasicConfig.WaterMark ?
