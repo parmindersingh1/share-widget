@@ -47,8 +47,15 @@ export const configure = (conf: Config) => {
     }
 
     let appConfig = { ...config, ee,containerClassName };
+    css2.onload = () =>{
+        try {
+            render(h(App, appConfig), shadowRoot);
+        }
+        catch (e) {
+            console.log('Could not load Newsletter Css')
+        }
+    }
 
-    render(h(App, appConfig), shadowRoot);
 }
 
 export const init = configure;
