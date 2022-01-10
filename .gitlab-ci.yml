@@ -1,0 +1,200 @@
+image: node:14
+cache:
+  untracked: false
+  key: "$CI_BUILD_REF_NAME"
+  paths:
+    - dist/
+
+stages:
+  - test
+  - analysis  
+  - build
+  - deploy
+
+before_script:
+  - printenv
+
+test:
+  stage: test
+  artifacts:
+    paths:
+      - node_modules/
+    expire_in: 1 hr
+  script:
+    - rm -rf node_modules
+    - npm install
+  before_script:
+    - ls -ltr
+    
+sonarqube-check:
+  stage: analysis
+  image: 
+    name: sonarsource/sonar-scanner-cli:latest
+    entrypoint: [""]
+  variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script: 
+    - sonar-scanner
+
+build-develop:
+  environment:
+    name: develop
+  stage: build
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 hr
+  script:
+    - rm -rf node_modules
+    - npm install
+    - npm run build
+  only:
+   - develop
+   - /^develop_[0-9]+(?:.[0-9]+)+$/
+
+build-qa:
+  environment:
+    name: qa
+  stage: build
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 hr
+  script:
+    - rm -rf node_modules
+    - npm install
+    - npm run build
+  only:
+   - qa
+   - /^qa_[0-9]+(?:.[0-9]+)+$/
+
+build-staging:
+  environment:
+    name: staging
+  stage: build
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 hr
+  script:
+    - rm -rf node_modules
+    - npm install
+    - npm run build
+  only:
+   - staging
+   - /^staging[0-9]+(?:.[0-9]+)+$/
+
+build-production:
+  environment:
+    name: production
+  stage: build
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 hr
+  script:
+    - rm -rf node_modules
+    - npm install
+    - npm run build
+  only:
+    - tags
+  except:
+    - master
+    - staging
+    - develop
+    - qa
+
+deploy-spaces_develop:
+  stage: deploy
+  variables:
+    S3_BUCKET_NAME: "adzapier-staging"
+  script:
+    - apt update
+    - apt install -y s3cmd 
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com put -r dist/index.html s3://$S3_BUCKET_NAME/consent-preference/newsletter-bundle/${CI_BUILD_REF_NAME}/index.html
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com --add-header 'Content-Encoding:gzip' put -r dist/index.html s3://$S3_BUCKET_NAME/consent-preference/newsletter-bundle/${CI_BUILD_REF_NAME}/index.html
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com --mime-type=application/javascript put -r dist/bundle.js s3://$S3_BUCKET_NAME/consent-preference/newsletter-bundle/${CI_BUILD_REF_NAME}/bundle.js
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com --mime-type=application/javascript --add-header 'Content-Encoding:gzip' put -r dist/bundle.js.gz s3://$S3_BUCKET_NAME/consent-preference/newsletter-bundle/${CI_BUILD_REF_NAME}/bundle.js.gz
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com --mime-type=text/css put -r dist/az-consent-preference-style.css s3://$S3_BUCKET_NAME/consent-preference/newsletter-bundle/${CI_BUILD_REF_NAME}/az-consent-preference-style.css
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com --mime-type=text/css --add-header 'Content-Encoding:gzip' put -r dist/az-consent-preference-style.css.gz s3://$S3_BUCKET_NAME/consent-preference/newsletter-bundle/${CI_BUILD_REF_NAME}/az-consent-preference-style.css.gz
+  only:
+    - develop
+
+deploy-spaces_qa:
+  stage: deploy
+  variables:
+    S3_BUCKET_NAME: "adzapier-staging"
+  script:
+    - apt update
+    - apt install -y s3cmd
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com put -r dist/index.html s3://$S3_BUCKET_NAME/consent-preference/newsletter-bundle/${CI_BUILD_REF_NAME}/index.html
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com --add-header 'Content-Encoding:gzip' put -r dist/index.html s3://$S3_BUCKET_NAME/consent-preference/newsletter-bundle/${CI_BUILD_REF_NAME}/index.html
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com --mime-type=application/javascript put -r dist/bundle.js s3://$S3_BUCKET_NAME/consent-preference/newsletter-bundle/${CI_BUILD_REF_NAME}/bundle.js
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com --mime-type=application/javascript --add-header 'Content-Encoding:gzip' put -r dist/bundle.js.gz s3://$S3_BUCKET_NAME/consent-preference/newsletter-bundle/${CI_BUILD_REF_NAME}/bundle.js.gz
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com --mime-type=text/css put -r dist/az-consent-preference-style.css s3://$S3_BUCKET_NAME/consent-preference/newsletter-bundle/${CI_BUILD_REF_NAME}/az-consent-preference-style.css
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com --mime-type=text/css --add-header 'Content-Encoding:gzip' put -r dist/az-consent-preference-style.css.gz s3://$S3_BUCKET_NAME/consent-preference/newsletter-bundle/${CI_BUILD_REF_NAME}/az-consent-preference-style.css.gz    
+  only:
+    - qa
+
+deploy-spaces_staging:
+  stage: deploy
+  variables:
+    S3_BUCKET_NAME: "adzapier-staging"
+  script:
+    - apt update
+    - apt install -y s3cmd
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com put -r dist/index.html s3://$S3_BUCKET_NAME/consent-preference/newsletter-bundle/${CI_BUILD_REF_NAME}/index.html
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com --add-header 'Content-Encoding:gzip' put -r dist/index.html s3://$S3_BUCKET_NAME/consent-preference/newsletter-bundle/${CI_BUILD_REF_NAME}/index.html
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com --mime-type=application/javascript put -r dist/bundle.js s3://$S3_BUCKET_NAME/consent-preference/newsletter-bundle/${CI_BUILD_REF_NAME}/bundle.js
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com --mime-type=application/javascript --add-header 'Content-Encoding:gzip' put -r dist/bundle.js.gz s3://$S3_BUCKET_NAME/consent-preference/newsletter-bundle/${CI_BUILD_REF_NAME}/bundle.js.gz
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com --mime-type=text/css put -r dist/az-consent-preference-style.css s3://$S3_BUCKET_NAME/consent-preference/newsletter-bundle/${CI_BUILD_REF_NAME}/az-consent-preference-style.css
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com --mime-type=text/css --add-header 'Content-Encoding:gzip' put -r dist/az-consent-preference-style.css.gz s3://$S3_BUCKET_NAME/consent-preference/newsletter-bundle/${CI_BUILD_REF_NAME}/az-consent-preference-style.css.gz    
+  only:
+    - staging
+
+deploy-spaces_production:
+  stage: deploy
+  variables:
+    S3_BUCKET_NAME: "primeconsent"
+  before_script:
+    - TAGS=$(echo ${CI_COMMIT_TAG} | sed 's/^.//') || true
+    - MAJOR=`echo $TAGS | sed "s/^\([0-9]*\).*/\1/"`
+    - MINOR=`echo $TAGS | sed "s/[0-9]*\.\([0-9]*\).*/\1/"`
+    - PATCH=`echo $TAGS | sed "s/[0-9]*\.[0-9]*\.\([0-9]*\).*/\1/"`
+  script:
+    - apt update
+    - apt install -y s3cmd
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com put -r dist/index.html s3://$S3_BUCKET_NAME/cmp/consent-preference/newsletter-bundle/index.html
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com put -r dist/index.html s3://$S3_BUCKET_NAME/cmp/consent-preference/newsletter-bundle/$MAJOR.$MINOR/index.html
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com put -r dist/index.html s3://$S3_BUCKET_NAME/cmp/consent-preference/newsletter-bundle/$MAJOR.$MINOR.$PATCH/index.html
+
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com --add-header 'Content-Encoding:gzip' put -r dist/index.html s3://$S3_BUCKET_NAME/cmp/consent-preference/newsletter-bundle/index.html
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com --add-header 'Content-Encoding:gzip' put -r dist/index.html s3://$S3_BUCKET_NAME/cmp/consent-preference/newsletter-bundle/$MAJOR.$MINOR/index.html
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com --add-header 'Content-Encoding:gzip' put -r dist/index.html s3://$S3_BUCKET_NAME/cmp/consent-preference/newsletter-bundle/$MAJOR.$MINOR.$PATCH/index.html
+
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com --mime-type=application/javascript put -r dist/bundle.js s3://$S3_BUCKET_NAME/cmp/consent-preference/newsletter-bundle/bundle.js
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com --mime-type=application/javascript put -r dist/bundle.js s3://$S3_BUCKET_NAME/cmp/consent-preference/newsletter-bundle/$MAJOR.$MINOR/bundle.js
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com --mime-type=application/javascript put -r dist/bundle.js s3://$S3_BUCKET_NAME/cmp/consent-preference/newsletter-bundle/$MAJOR.$MINOR.$PATCH/bundle.js
+
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com --mime-type=application/javascript --add-header 'Content-Encoding:gzip' put -r dist/bundle.js.gz s3://$S3_BUCKET_NAME/cmp/consent-preference/newsletter-bundle/bundle.js.gz
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com --mime-type=application/javascript --add-header 'Content-Encoding:gzip' put -r dist/bundle.js.gz s3://$S3_BUCKET_NAME/cmp/consent-preference/newsletter-bundle/$MAJOR.$MINOR/bundle.js.gz
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com --mime-type=application/javascript --add-header 'Content-Encoding:gzip' put -r dist/bundle.js.gz s3://$S3_BUCKET_NAME/cmp/consent-preference/newsletter-bundle/$MAJOR.$MINOR.$PATCH/bundle.js.gz     
+  
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com --mime-type=text/css put -r dist/az-consent-preference-style.css s3://$S3_BUCKET_NAME/cmp/consent-preference/newsletter-bundle/az-consent-preference-style.css
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com --mime-type=text/css put -r dist/az-consent-preference-style.css s3://$S3_BUCKET_NAME/cmp/consent-preference/newsletter-bundle/$MAJOR.$MINOR/az-consent-preference-style.css
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com --mime-type=text/css put -r dist/az-consent-preference-style.css s3://$S3_BUCKET_NAME/cmp/consent-preference/newsletter-bundle/$MAJOR.$MINOR.$PATCH/az-consent-preference-style.css
+
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com --mime-type=text/css --add-header 'Content-Encoding:gzip' put -r dist/az-consent-preference-style.css.gz s3://$S3_BUCKET_NAME/cmp/consent-preference/newsletter-bundle/az-consent-preference-style.css.gz
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com --mime-type=text/css --add-header 'Content-Encoding:gzip' put -r dist/az-consent-preference-style.css.gz s3://$S3_BUCKET_NAME/cmp/consent-preference/newsletter-bundle/$MAJOR.$MINOR/az-consent-preference-style.css.gz
+    - s3cmd --quiet --no-check-certificate --acl-public --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --host=nyc3.digitaloceanspaces.com --host-bucket=%\(bucket\)s.nyc3.digitaloceanspaces.com --mime-type=text/css --add-header 'Content-Encoding:gzip' put -r dist/az-consent-preference-style.css.gz s3://$S3_BUCKET_NAME/cmp/consent-preference/newsletter-bundle/$MAJOR.$MINOR.$PATCH/az-consent-preference-style.css.gz
+  only:
+    - tags
+  except:
+    - master
+    - staging
+    - develop
+    - qa
