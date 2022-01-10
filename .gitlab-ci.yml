@@ -51,7 +51,7 @@ build-develop:
   script:
     - rm -rf node_modules
     - npm install
-    - npm run build
+    - npm run build:app
   only:
    - develop
    - /^develop_[0-9]+(?:.[0-9]+)+$/
@@ -67,7 +67,7 @@ build-qa:
   script:
     - rm -rf node_modules
     - npm install
-    - npm run build
+    - npm run build:app
   only:
    - qa
    - /^qa_[0-9]+(?:.[0-9]+)+$/
@@ -83,7 +83,7 @@ build-staging:
   script:
     - rm -rf node_modules
     - npm install
-    - npm run build
+    - npm run build:app
   only:
    - staging
    - /^staging[0-9]+(?:.[0-9]+)+$/
@@ -99,7 +99,7 @@ build-production:
   script:
     - rm -rf node_modules
     - npm install
-    - npm run build
+    - npm run build:app
   only:
     - tags
   except:
