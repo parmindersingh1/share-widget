@@ -52,6 +52,8 @@ build-develop:
     - rm -rf node_modules
     - npm install
     - npm run build:app
+    - cp -r build/* dist/
+    - ls -ltra ./dist/
   only:
    - develop
    - /^develop_[0-9]+(?:.[0-9]+)+$/
