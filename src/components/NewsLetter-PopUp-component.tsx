@@ -55,6 +55,7 @@ export class NewsLetterPopUpComponent extends Component<any, any> {
     }
     onShowBannerFrequency() {
         const cookieConsent = getCookie(cookieName.AzConsentPreference);
+        let showPopup = false;
         if (cookieConsent) {
             const decodeConsent = JSON.parse(cookieConsent);
             const displayFrequency: any = this.props.configurationData.Configuration.DisplayFrequency;
@@ -64,18 +65,21 @@ export class NewsLetterPopUpComponent extends Component<any, any> {
                     displayFrequency.DisplayClosedConsentType === 'hours' &&
                     hours >= displayFrequency.DisplayClosedConsent
                 ) {
-                    this.onShowPopUp();
+                    showPopup = true
                 } else if (
                     displayFrequency.DisplayClosedConsentType === 'days' &&
                     days >= displayFrequency.DisplayClosedConsent
                 ) {
-                    this.onShowPopUp();
+                    showPopup = true
                 } else if (
                     displayFrequency.DisplayClosedConsentType === 'pageViews' &&
                     pageViews >= displayFrequency.DisplayClosedConsent
                 ) {
-                    this.onShowPopUp();
+                    showPopup = true
                 }
+            }
+            if(showPopup) {
+                this.onShowPopUp();
             }
         }
     }
