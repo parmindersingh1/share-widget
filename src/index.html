@@ -52,6 +52,7 @@
 
 <!--  <button id="toggleButn">Open Modal</button>-->
 <script>
+
     var NewsLetterConfiguration = {
         Configuration: {
             'Form': {
@@ -93,79 +94,71 @@
                 }, {'key': 'privacy_Policy', 'display': true, 'required': true}]
             },
             'Layout': {
-                'HeaderBackgroundColor': '#010e20',
-                'HeaderTextColor': '#ffffff',
-                'BorderColor': '#2196F3',
-                'BodyBackgroundColor': '#010e20',
-                'BodyTextColor': '#ffffff',
+                'HeaderBackgroundColor': '#ffffff',
+                'HeaderTextColor': '#333333',
+                'BorderColor': '#f87271',
+                'BodyBackgroundColor': '#fee2e1',
+                'BodyTextColor': '#333333',
                 'SubscribeButtonBackgroundColor': '#92c6fd',
                 'SubscribeButtonTextColor': '#222222',
-                'ThemeType': 'dark'
+                'ThemeType': 'light'
             },
             'Branding': {'CompanyLogo': null},
-            'BasicConfig': {'WaterMark': true, 'BoxedType': 'left-bottom'},
+            'BasicConfig': {'WaterMark': '', 'BoxedType': 'center', 'MutePopup': false},
             'LanguagesConfig': {
                 'LanguageData': {
                     'enUS': {
-                        'city': 'City',
-                        'country': 'Country',
+                        'title': 'Join Our Newsletter',
                         'description': 'Stay In The Loop!',
-                        'email': 'Email address',
                         'firstName': 'First name',
                         'lastName': 'Last name',
-                        'poweredByText': 'Powered by',
-                        'privacyPolicy': ' Privacy Policy',
+                        'city': 'City',
+                        'country': 'Country',
+                        'zipCode': 'Zip Code',
+                        'email': 'Email address',
                         'privacyText': 'I agree to the',
-                        'subscribeButtonText': 'Subscribe',
                         'termAndCondition': 'Terms and Conditions ',
-                        'title': 'Join Our Newsletter',
-                        'zipCode': 'Zip Code'
-                    },
-                    'itIT': {
-                        'SubscribeButtonText': 'Subscribe',
-                        'city': 'CittÃ ',
-                        'country': 'Nazione',
-                        'description': 'Rimani nel giro!',
-                        'email': 'Indirizzo email',
-                        'firstName': 'Nome di battesimo',
-                        'lastName': 'Cognome',
+                        'privacyPolicy': ' Privacy Policy',
                         'poweredByText': 'Powered by',
-                        'privacyPolicy': 'politica sulla riservatezza',
-                        'privacyText': 'sono d\'accordo con',
-                        'termAndCondition': 'Termini e Condizioni',
-                        'title': 'Iscriviti alla nostra newsletter',
-                        'zipCode': 'Cap'
+                        'subscribeButtonText': 'Subscribe'
                     },
                     'zhCN': {
-                        'SubscribeButtonText': 'è®¢é˜…',
-                        'city': 'åŸŽå¸‚',
-                        'country': 'å›½å®¶',
+                        'title': 'åŠ å…¥æˆ‘ä»¬çš„é€šè®¯',
                         'description': 'ç•™åœ¨å¾ªçŽ¯ä¸­ï¼',
-                        'email': 'ç”µå­é‚®ä»¶åœ°å€',
                         'firstName': 'å',
                         'lastName': 'å§“',
-                        'poweredByText': 'ä¾›ç”µ',
-                        'privacyPolicy': ' éšç§æ”¿ç­–',
+                        'city': 'åŸŽå¸‚',
+                        'country': 'å›½å®¶',
+                        'zipCode': 'é‚®æ”¿ç¼–ç ',
+                        'email': 'ç”µå­é‚®ä»¶åœ°å€',
                         'privacyText': 'æˆ‘åŒæ„',
                         'termAndCondition': 'æ¡æ¬¾å’Œæ¡ä»¶ ',
-                        'title': 'åŠ å…¥æˆ‘ä»¬çš„é€šè®¯',
-                        'zipCode': 'é‚®æ”¿ç¼–ç '
+                        'privacyPolicy': ' éšç§æ”¿ç­–',
+                        'poweredByText': 'ä¾›ç”µ',
+                        'subscribeButtonText': 'è®¢é˜…'
+                    },
+                    'itIT': {
+                        'title': 'Iscriviti alla nostra newsletter',
+                        'description': 'Rimani nel giro!',
+                        'firstName': 'Nome di battesimo',
+                        'lastName': 'Cognome',
+                        'city': 'CittÃ ',
+                        'country': 'Nazione',
+                        'zipCode': 'Cap',
+                        'email': 'Indirizzo email',
+                        'privacyText': 'sono d\'accordo con',
+                        'termAndCondition': 'Termini e Condizioni',
+                        'privacyPolicy': 'politica sulla riservatezza',
+                        'poweredByText': 'Powered by',
+                        'subscribeButtonText': 'Subscribe'
                     }
                 },
                 'CustonLang': [],
-                'AllowedLang': [{
-                    'code': 'enUS',
-                    'countryFlag': 'us',
-                    'title': 'English (United States)'
-                }, {'code': 'itIT', 'countryFlag': 'it', 'title': 'Italian (Italy)'}, {
-                    'code': 'zhCN',
-                    'countryFlag': 'cn',
-                    'title': 'Chinese (PRC)'
-                }],
-                'DefaultLanguage': 'zhCN'
+                'AllowedLang': [{'title': 'English (United States)', 'code': 'enUS', 'countryFlag': 'us'}],
+                'DefaultLanguage': 'enUS'
             },
-            'Links': {'TermAndConditionLink': 'test.cpom', 'PrivacyLink': 'test.com'},
-            'DisplayFrequency': {'DisplayClosedConsent': 10, 'DisplayClosedConsentType': 'pageViews'}
+            'Links': {'TermAndConditionLink': 'test.com', 'PrivacyLink': 'test1.com'},
+            'DisplayFrequency': {'DisplayClosedConsent': 5, 'DisplayClosedConsentType': 'pageViews'}
         },
         PropId: 'd5511f97-bd8f-46cd-b897-d5bd8e0bda5a',
         OrgId: '56dd7f70-079d-42ca-9edb-cee54730aa08',
@@ -174,9 +167,9 @@
             env: 'develop',
         },
         EnvConfig: {
-            ApiBaseUrl: 'http://localhost:8888/api/v1',
-            EndPoint: '/consent-preference/newsletter/:pid',
-            Env: 'local'
+            ApiBaseUrl: 'https://develop-cmp-api.adzpier-staging.com',
+            EndPoint: '/api/v1/consent-preference/newsletter/:pid',
+            Env: 'development'
         }
     };
     window.AZSocial.init(NewsLetterConfiguration)
@@ -201,7 +194,6 @@
     }
 
 </script>
-
 </body>
 
 </html>

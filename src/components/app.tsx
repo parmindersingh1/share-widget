@@ -1,13 +1,12 @@
 import { Fragment, Component, h } from 'preact';
-
 import { EventEmitter } from 'events';
 import { Config } from '../types';
-
-import { setVisible } from '../utils/dom'
 import './app.module.scss';
 import {NewsLetterPopUpComponent} from './NewsLetter-PopUp-component';
 import '../style/Index-tailwind.css'
 import './Style.css'
+import {cookieName} from '../constants/cookie-name.constant';
+import {getCookie, setCookie} from '../services/cookies.service';
 
 interface AppProps extends Config {
     containerClassName: string,
@@ -23,7 +22,6 @@ type ExpandableState = {
 
 
 class App extends Component<any, ExpandableState> {
-    private containerClassName: string;
     constructor(props: any) {
         super(props);
         let configurationRefactor = {
@@ -42,17 +40,22 @@ class App extends Component<any, ExpandableState> {
             configuration: props,
             toggled: true,
         }
-
     }
 
-    handleClick = () => {
-        // debugger;
-        this.setState({
-            toggled: !this.state.toggled
-        });
-        console.log(this.state.toggled)
-        setVisible(false);
-        // debugger;
+    componentDidMount() {
+        const cookieConsent = getCookie(cookieName.AzConsentPreference);
+        if (cookieConsent) {
+           const consent = JSON.parse(cookieConsent);
+           const consentEdited = {...consent}
+            consentEdited.pageViews ++
+            setCookie(cookieName.AzConsentPreference, JSON.stringify(consentEdited))
+        } else {
+            const initCookie = JSON.stringify({
+                consentVersion: 1,
+                pageViews: 1
+            })
+            setCookie(cookieName.AzConsentPreference, initCookie)
+        }
     }
 
     render() {

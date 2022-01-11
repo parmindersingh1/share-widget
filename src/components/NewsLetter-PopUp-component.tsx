@@ -1,58 +1,39 @@
 import {h, Component, Fragment} from 'preact';
 import SubscriptionFormComponent from './Subscription-form.component';
+import {getCookie, setCookie} from '../services/cookies.service';
+import {cookieName, optStatus} from '../constants/cookie-name.constant';
 
 export class NewsLetterPopUpComponent extends Component<any, any> {
     state = {
-        consent: '',
+        show: true,
         changeLang: ''
     }
     componentDidMount() {
-        this.hideNewsletter();
+        this.checkNewsletterStatus();
+        this.onShowBannerFrequency();
     }
 
-    getCookie(cookieName: any) {
-        const name = cookieName + '=';
-        const decodedCookie = decodeURIComponent(document.cookie);
-        const ca = decodedCookie.split(';');
-        for (let i = 0; i < ca.length; i++) {
-            let c = ca[i];
-            while (c.charAt(0) == ' ') {
-                c = c.substring(1);
-            }
-            if (c.indexOf(name) == 0) {
-                return c.substring(name.length, c.length);
+
+    checkNewsletterStatus = () =>{
+        const cookieConsent = getCookie(cookieName.AzConsentPreference);
+        if (cookieConsent) {
+            const consent = JSON.parse(cookieConsent);
+            if (consent.hasOwnProperty('status')) {
+                this.setState({
+                    show: !consent?.status
+                })
             }
         }
-        return '';
     }
-    hideNewsletter = () =>{
-        const consent = this.getCookie('az-newsletter');
-        this.setState({
-            consent
-        });
+    onOptOut = (e) => {
+        const cookieConsent = getCookie(cookieName.AzConsentPreference);
+        const consent = JSON.parse(cookieConsent);
+        const consentEdited = {...consent}
+        consentEdited.status = e === optStatus.optIn ? optStatus.optIn : optStatus.optOut
+        setCookie(cookieName.AzConsentPreference, JSON.stringify(consentEdited))
+        this.checkNewsletterStatus()
     }
-    onOptOut = () => {
-        this.setCookie('az-newsletter', 'Opt-out')
-        this.hideNewsletter();
-    }
-    setCookie(cookieName, cookieValue) {
-        const date = new Date();
-        date.setTime(
-            date.getTime() + 365 * 24 * 60 * 60 * 1000
-        );
-        const expires = 'expires=' + date.toUTCString();
-        // const secstr = ";secure";
-        document.cookie =
-            cookieName +
-            '=' +
-            cookieValue +
-            ';' +
-            expires +
-            ';' +
-            'host=' +
-            ';path=/';
-        // + ";SameSite=Lax" + secstr;
-    }
+
     onFindAllowedLang(browserLang): boolean {
         let status = false;
         for (const lang of this.props.configurationData.Configuration.LanguagesConfig.AllowedLang) {
@@ -67,9 +48,49 @@ export class NewsLetterPopUpComponent extends Component<any, any> {
             changeLang: e.target.value
         })
     }
+    onShowPopUp() {
+        this.setState({
+            show: true
+        })
+    }
+    onShowBannerFrequency() {
+        const cookieConsent = getCookie(cookieName.AzConsentPreference);
+        if (cookieConsent) {
+            const decodeConsent = JSON.parse(cookieConsent);
+            const displayFrequency: any = this.props.configurationData.Configuration.DisplayFrequency;
+            const {hours, days, pageViews} = this.onGetTimeDif(decodeConsent);
+            if (decodeConsent?.status === optStatus.optOut) {
+                if (
+                    displayFrequency.DisplayClosedConsentType === 'hours' &&
+                    hours >= displayFrequency.DisplayClosedConsent
+                ) {
+                    this.onShowPopUp();
+                } else if (
+                    displayFrequency.DisplayClosedConsentType === 'days' &&
+                    days >= displayFrequency.DisplayClosedConsent
+                ) {
+                    this.onShowPopUp();
+                } else if (
+                    displayFrequency.DisplayClosedConsentType === 'pageViews' &&
+                    pageViews >= displayFrequency.DisplayClosedConsent
+                ) {
+                    this.onShowPopUp();
+                }
+            }
+        }
+    }
+    onGetTimeDif(decodeConsent) {
+        // @ts-ignore
+        const deff = new Date() - new Date(decodeConsent?.lastInteraction);
+        const milliseconds = Math.abs(deff);
+        const hours = Math.floor(milliseconds / 36e5);
+        const days = Math.floor(milliseconds / (1000 * 3600 * 24));
+        return { hours, days, pageViews: decodeConsent?.pageViews };
+    }
+
     render() {
         const config = this.props.configurationData.Configuration;
-        const {consent, changeLang} = this.state;
+        const {show, changeLang} = this.state;
         const browserLang = window.navigator?.language?.replace('-','')
         let content = null;
         let currentLang = null;
@@ -85,17 +106,16 @@ export class NewsLetterPopUpComponent extends Component<any, any> {
             content = this.props.configurationData.Configuration?.LanguagesConfig?.LanguageData[defaultLanguage];
         }
         const languageList = this.props.configurationData.Configuration.LanguagesConfig.AllowedLang;
-        console.log('content',  (config.BasicConfig?.BoxedType !== 'bottom-left' || config.BasicConfig?.BoxedType !== 'bottom-right') && config.BasicConfig?.BoxedType !== 'center')
         return (
             <Fragment>
-                {!consent ?
+                {show ?
                 <div class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog"
                      aria-modal="true">
                     <div style={{float: config.BasicConfig?.BoxedType === 'top-right'  ? 'right' : null}}
                         className={
                        config.BasicConfig?.BoxedType === 'center' ? `flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0 ` : null
                     }>
-                        <div style={{marginTop: config.BasicConfig?.BoxedType !== 'center' ? '0px' : null,
+                        <div style={{marginTop: config.BasicConfig?.BoxedType !== 'center' ? '0px' : '5em',
                             position: (config.BasicConfig?.BoxedType !== 'bottom-left' || config.BasicConfig?.BoxedType !== 'bottom-right') && config.BasicConfig?.BoxedType !== 'center' ? 'fixed' : null,
                             bottom: (config.BasicConfig?.BoxedType === 'bottom-left' || config.BasicConfig?.BoxedType === 'bottom-right') && config.BasicConfig?.BoxedType !== 'center' ? '0px' : null,
                             top: (config.BasicConfig?.BoxedType === 'top-left' || config.BasicConfig?.BoxedType === 'top-right') && config.BasicConfig?.BoxedType !== 'center' ? '10px' : null,
@@ -140,7 +160,7 @@ export class NewsLetterPopUpComponent extends Component<any, any> {
                             </div>
                             <div style={{backgroundColor: config.Layout?.BodyBackgroundColor, borderTop: `3px solid ${config.Layout?.BodyTextColor}`, paddingBottom: '2.25rem'}}
                                  class="bg-red-200 px-4 py-5">
-                                <SubscriptionFormComponent hideNewsletter={this.hideNewsletter} content={content} configurationData={this.props.configurationData}/>
+                                <SubscriptionFormComponent hideNewsletter={this.onOptOut} content={content} configurationData={this.props.configurationData}/>
                                 {config.BasicConfig.WaterMark ?
                                 <div className={'float-right sm:m-0'}>
                                     <p className={'sm:m-0'}>

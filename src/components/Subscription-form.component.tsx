@@ -1,7 +1,14 @@
-import {Component, Fragment, h} from 'preact';
+import {Component, createRef, Fragment, h} from 'preact';
 import {useState, useCallback} from 'preact/hooks'
+import {findDOMNode} from 'preact/compat';
+import {getCookie, setCookie} from '../services/cookies.service';
+import {cookieName,  optStatus} from '../constants/cookie-name.constant';
 
 export default class SubscriptionFormComponent extends Component<any, any> {
+    constructor() {
+        super();
+    }
+
     state = {
         formData: {
             first_Name: '',
@@ -193,8 +200,17 @@ export default class SubscriptionFormComponent extends Component<any, any> {
         if (errors.first_Name.error || errors.last_Name.error || errors.country.error || errors.city.error || errors.zip_Code.error || errors.email.error || errors.privacyPolicy.error) {
             return false;
         }
-        this.setCookie('az-newsletter', 'Opt-in')
-        this.props.hideNewsletter('Opt-in');
+        const cookieConsent = getCookie(cookieName.AzConsentPreference);
+        if (cookieConsent) {
+            const consent = JSON.parse(cookieConsent);
+            const consentEdited = {...consent}
+            consentEdited.consentVersion++
+            consentEdited.lastInteraction = new Date()
+            consentEdited.status = optStatus.optIn
+            setCookie(cookieName.AzConsentPreference, JSON.stringify(consentEdited))
+        }
+
+        this.props.hideNewsletter(optStatus.optIn);
         const xhr = new XMLHttpRequest;
         const that = this;
         const config = this.props.configurationData;
@@ -215,6 +231,12 @@ export default class SubscriptionFormComponent extends Component<any, any> {
             {preference: "terms_and_conditions", allow: true},
             {preference: "privacy_policy", allow: true},
             {preference: "newsletter", allow: true},
+        ];
+        payloadData.proofs = [ // Optional
+            {
+                content: JSON.stringify(payloadData),
+                form:  JSON.stringify(ev.target.innerHTML)
+            }
         ];
         const path = config.EnvConfig?.ApiBaseUrl + config.EnvConfig?.EndPoint.replace(':pid', config.PropId)
         xhr.open("POST", path);
@@ -248,14 +270,12 @@ export default class SubscriptionFormComponent extends Component<any, any> {
             ';path=/';
         // + ";SameSite=Lax" + secstr;
     }
-
     render() {
         const {errors, submitted} = this.state;
         // console.log('this.props.configuration', this.props.configurationData)
         const config: any = this.props.configurationData.Configuration.Form.Validation;
         const layoutConfig: any = this.props.configurationData.Configuration.Layout;
         const content = this.props?.content;
-        console.log('content', content)
         return (
             <Fragment>
             <form onSubmit={this.handleSubmit}>
