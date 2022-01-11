@@ -1,13 +1,8 @@
-import {Component, createRef, Fragment, h} from 'preact';
-import {useState, useCallback} from 'preact/hooks'
-import {findDOMNode} from 'preact/compat';
+import {Component, Fragment, h} from 'preact';
 import {getCookie, setCookie} from '../services/cookies.service';
 import {cookieName,  optStatus} from '../constants/cookie-name.constant';
 
 export default class SubscriptionFormComponent extends Component<any, any> {
-    constructor() {
-        super();
-    }
 
     state = {
         formData: {
@@ -212,7 +207,6 @@ export default class SubscriptionFormComponent extends Component<any, any> {
 
         this.props.hideNewsletter(optStatus.optIn);
         const xhr = new XMLHttpRequest;
-        const that = this;
         const config = this.props.configurationData;
         const formData = this.state.formData;
         const payloadData:any = {};

@@ -1,18 +1,10 @@
 import { Fragment, Component, h } from 'preact';
-import { EventEmitter } from 'events';
-import { Config } from '../types';
 import './app.module.scss';
 import {NewsLetterPopUpComponent} from './NewsLetter-PopUp-component';
 import '../style/Index-tailwind.css'
 import './Style.css'
 import {cookieName} from '../constants/cookie-name.constant';
 import {getCookie, setCookie} from '../services/cookies.service';
-
-interface AppProps extends Config {
-    containerClassName: string,
-    ee?: EventEmitter;
-}
-
 // Types for state
 type ExpandableState = {
     containerClassName?: string,
