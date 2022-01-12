@@ -40,6 +40,7 @@ sonarqube-check:
       - .sonar/cache
   script: 
     - sonar-scanner
+  allow_failure: true
 
 build-develop:
   environment:
