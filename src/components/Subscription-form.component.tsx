@@ -149,9 +149,9 @@ export default class SubscriptionFormComponent extends Component<any, any> {
             if (zip_Code.trim() === ''  && config.zip_Code?.required) {
                 errors.zip_Code.error = true;
                 errors.zip_Code.message = 'This field is required'
-            } else if (zip_Code.length < config.zip_Code?.minLength) {
+            } else if (zip_Code.length < config.zip_Code?.minLength || zip_Code.length > config.zip_Code?.maxLength) {
                 errors.zip_Code.error = true;
-                errors.zip_Code.message = `Required, Minimum length ${config.zip_Code?.minLength}`
+                errors.zip_Code.message = `Required, Minimum length ${config.zip_Code?.minLength}, Maximum length ${config.zip_Code?.maxLength}`
             } else {
                 errors.zip_Code.error = false;
                 errors.zip_Code.message = '';
