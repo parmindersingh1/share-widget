@@ -129,11 +129,12 @@ export class NewsLetterPopUpComponent extends Component<any, any> {
                             <div style={{backgroundColor: config.Layout?.HeaderBackgroundColor}}
                                  class={`bg-white  pt-1 pb-4 sm:pt-1 sm:pl-1 sm:pr-1 sm:p-6 sm:pb-4`}>
                                 <div class="w-20 float-left  sm:col-span-4">
+                                    {languageList.length > 1 ?
                                     <select id="country" name="country" onChange={($event) => this.onChangeLang($event)} autocomplete="country-name" style={{fontSize: '12px'}} class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                         {languageList.map(item =>
                                             <option selected={item.code === currentLang} value={item.code}>{item.title}</option>
                                         )}
-                                    </select>
+                                    </select> : null}
                                 </div>
                                 <div className="float-right cursor-pointer" onClick={this.onOptOut}>
                                     <svg style={{color: config.Layout?.HeaderTextColor, height: '1.5rem', width: '1.5rem'}} xmlns="http://www.w3.org/2000/svg"
