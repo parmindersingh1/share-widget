@@ -7,27 +7,15 @@
     
 //   }
 export interface Config  {
-    type: string,
-    display?:boolean,
-    backgrounColor?:string,
-    logoURl?: string,
-    body?: string,
-    socialMedia?:{
-        twitter?:{
-            buttonText?:string,
-            buttonColor?:string
-        }
-        facebook?:{
-            buttonText?:string,
-            buttonColor?:string
-        },
-        linkedin?:{
-            buttonText?:string,
-            buttonColor?:string
-        }
-        instagram?:{
-            buttonText?:string,
-            buttonColor?:string
-        }
+    Configuration: {
+        position: string,
+        icons?: Array<any>
     }
 }
+
+export interface Item {
+    id?: number;
+    name: string;
+    link: string;
+    icon?: any;
+  }

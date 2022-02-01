@@ -1,5 +1,5 @@
 export const setVisible = (value: boolean) => {
-  const container = document.querySelector('.az-social') as HTMLElement;
+  const container = document.querySelector('.az-social-icon') as HTMLElement;
   // debugger;
   if (value) {
     // container.style.display="block !important"

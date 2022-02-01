@@ -1,61 +1,35 @@
 import { Fragment, Component, h } from 'preact';
 import './app.module.scss';
-import {NewsLetterPopUpComponent} from './NewsLetter-PopUp-component';
+
 import '../style/Index-tailwind.css'
 import './Style.css'
-import {cookieName} from '../constants/cookie-name.constant';
-import {getCookie, setCookie} from '../services/cookies.service';
+import { ShareIcons } from './ShareIcons';
+
 // Types for state
 type ExpandableState = {
-    containerClassName?: string,
-    configuration?: any,
-    toggled: boolean,
+    configuration?: any
 };
 
 
 class App extends Component<any, ExpandableState> {
     constructor(props: any) {
         super(props);
-        let configurationRefactor = {
-                Validation: {}
-        }
-        props.Configuration.Form.Validation.map(item => {
-            configurationRefactor.Validation[item.key] = {
-                display: item.display,
-                required: item.required,
-                minLength: item.minLength,
-                maxLength: item.maxLength,
-            }
-        })
-        props.Configuration.Form = configurationRefactor
+        
         this.state = {
-            configuration: props,
-            toggled: true,
+            configuration: props.Configuration
         }
     }
 
     componentDidMount() {
-        const cookieConsent = getCookie(cookieName.AzConsentPreference);
-        if (cookieConsent) {
-           const consent = JSON.parse(cookieConsent);
-           const consentEdited = {...consent}
-            consentEdited.pageViews ++
-            setCookie(cookieName.AzConsentPreference, JSON.stringify(consentEdited))
-        } else {
-            const initCookie = JSON.stringify({
-                consentVersion: 1,
-                pageViews: 1
-            })
-            setCookie(cookieName.AzConsentPreference, initCookie)
-        }
+        
     }
 
     render() {
         return (
             <Fragment>
-                {!this.state.configuration.Configuration.BasicConfig?.MutePopup ?
-                <div class="font-sans">
-                    <NewsLetterPopUpComponent configurationData={this.state.configuration} />
+                {(this.state.configuration?.position && this.state.configuration?.icons ) ?
+                <div class="share-icons">
+                    <ShareIcons  position={this.state.configuration.position} icons={this.state.configuration.icons || []}/>
                 </div> : null}
             </Fragment>
             )

@@ -5,193 +5,64 @@
     <meta charset="utf-8"/>
     <title>Getting Started</title>
     <!-- <link rel="stylesheet" href="cookie-consent.css" /> -->
-    <script type="text/javascript" src="bundle.js"></script>
+    <!-- <script type="text/javascript" src="bundle.js"></script> -->
+    <!-- <script type="text/javascript" src="lib.tsx"></script> -->
 
 </head>
 
 <body>
-<!-- <script src="./dist/main.js"></script> -->
-<script type="text/javascript">
 
-    var option = {
-        logobase64: '',
-        frequency: {
-            seconds: 10,
-            pageview: 10
-        },
-        backgrounColor: 'black',
-        bodyText: 'for the latest Adzapier Announcement Foolow us on Twitter',
-        socials: {
-            twitter: {
-                twitterLink: 'https://twitter.com/intent/follow?screen_name=adzapier&utm_campaign=adzapier',
-                text: 'fllow os on twitter',
-                buttonColor: 'blue',
-            },
-            facebook: {
-                twitterLink: 'https://www.facebook.com/Adzapier/',
-                text: 'fllow os on Facebook',
-                buttonColor: 'green',
-            },
-            linkdin: {
-                twitterLink: 'https://www.linkedin.com/company/adzapier/',
-                text: 'fllow os on Facebook',
-                buttonColor: 'red',
-            },
-        },
-        thankyou: 'Thank you for subscribing!'
-
-    }
-    // window.CookieConsent.init(option)
-</script>
-
-<!--<div style="min-height: 50px;">-->
-
-<!--</div>-->
-<!--  <h1>Website Body</h1>-->
-
-
-<!--  <button id="toggleButn">Open Modal</button>-->
 <script>
 
-    var NewsLetterConfiguration = {
+    document.addEventListener('DOMContentLoaded', (event) => {
+
+    var SocialIconConfiguration = {
         Configuration: {
-            'Form': {
-                'Validation': [{
-                    'key': 'first_Name',
-                    'display': true,
-                    'required': true,
-                    'minLength': 3,
-                    'maxLength': 14
-                }, {
-                    'key': 'last_Name',
-                    'display': true,
-                    'required': true,
-                    'minLength': 3,
-                    'maxLength': 12
-                }, {
-                    'key': 'city',
-                    'display': true,
-                    'required': true,
-                    'minLength': 3,
-                    'maxLength': 8
-                }, {
-                    'key': 'country',
-                    'display': true,
-                    'required': true,
-                    'minLength': 3,
-                    'maxLength': 9
-                }, {
-                    'key': 'zip_Code',
-                    'display': true,
-                    'required': true,
-                    'minLength': 5,
-                    'maxLength': 6
-                }, {
-                    'key': 'email',
-                    'display': true,
-                    'required': true,
-                    'emailValidation': null
-                }, {'key': 'privacy_Policy', 'display': true, 'required': true}]
-            },
-            'Layout': {
-                'HeaderBackgroundColor': '#ffffff',
-                'HeaderTextColor': '#333333',
-                'BorderColor': '#f87271',
-                'BodyBackgroundColor': '#fee2e1',
-                'BodyTextColor': '#333333',
-                'SubscribeButtonBackgroundColor': '#92c6fd',
-                'SubscribeButtonTextColor': '#222222',
-                'ThemeType': 'light'
-            },
-            'Branding': {'CompanyLogo': null},
-            'BasicConfig': {'WaterMark': '', 'BoxedType': 'center', 'MutePopup': false},
-            'LanguagesConfig': {
-                'LanguageData': {
-                    'enUS': {
-                        'title': 'Join Our Newsletter',
-                        'description': 'Stay In The Loop!',
-                        'firstName': 'First name',
-                        'lastName': 'Last name',
-                        'city': 'City',
-                        'country': 'Country',
-                        'zipCode': 'Zip Code',
-                        'email': 'Email address',
-                        'privacyText': 'I agree to the',
-                        'termAndCondition': 'Terms and Conditions ',
-                        'privacyPolicy': ' Privacy Policy',
-                        'poweredByText': 'Powered by',
-                        'subscribeButtonText': 'Subscribe'
-                    },
-                    'zhCN': {
-                        'title': 'åŠ å…¥æˆ‘ä»¬çš„é€šè®¯',
-                        'description': 'ç•™åœ¨å¾ªçŽ¯ä¸­ï¼',
-                        'firstName': 'å',
-                        'lastName': 'å§“',
-                        'city': 'åŸŽå¸‚',
-                        'country': 'å›½å®¶',
-                        'zipCode': 'é‚®æ”¿ç¼–ç ',
-                        'email': 'ç”µå­é‚®ä»¶åœ°å€',
-                        'privacyText': 'æˆ‘åŒæ„',
-                        'termAndCondition': 'æ¡æ¬¾å’Œæ¡ä»¶ ',
-                        'privacyPolicy': ' éšç§æ”¿ç­–',
-                        'poweredByText': 'ä¾›ç”µ',
-                        'subscribeButtonText': 'è®¢é˜…'
-                    },
-                    'itIT': {
-                        'title': 'Iscriviti alla nostra newsletter',
-                        'description': 'Rimani nel giro!',
-                        'firstName': 'Nome di battesimo',
-                        'lastName': 'Cognome',
-                        'city': 'CittÃ ',
-                        'country': 'Nazione',
-                        'zipCode': 'Cap',
-                        'email': 'Indirizzo email',
-                        'privacyText': 'sono d\'accordo con',
-                        'termAndCondition': 'Termini e Condizioni',
-                        'privacyPolicy': 'politica sulla riservatezza',
-                        'poweredByText': 'Powered by',
-                        'subscribeButtonText': 'Subscribe'
-                    }
+            'position': 'right',
+            'icons': [
+                {
+                    name: "twitter",
+                    link: 'https://twitter.com/intent/follow?screen_name=adzapier&utm_campaign=adzapier'
                 },
-                'CustonLang': [],
-                'AllowedLang': [{'title': 'English (United States)', 'code': 'enUS', 'countryFlag': 'us'}],
-                'DefaultLanguage': 'enUS'
-            },
-            'Links': {'TermAndConditionLink': 'test.com', 'PrivacyLink': 'test1.com'},
-            'DisplayFrequency': {'DisplayClosedConsent': 5, 'DisplayClosedConsentType': 'pageViews'}
+                {
+                    name: "facebook",
+                    link: 'https://www.facebook.com/Adzapier/'
+                },
+                {
+                    name: "linkedin",
+                    link: 'https://www.linkedin.com/company/adzapier/'
+                },
+                {
+                    name: "whatsapp",
+                    link: 'https://www.whatsapp.com/company/adzapier/'
+                },
+                {
+                    name: "viber",
+                    link: 'https://www.viber.com/company/adzapier/'
+                }
+            ]
+        
         },
         PropId: 'd5511f97-bd8f-46cd-b897-d5bd8e0bda5a',
         OrgId: '56dd7f70-079d-42ca-9edb-cee54730aa08',
-        LokiConfiguration: {
-            app: 'newsletter-develop',
-            env: 'develop',
-        },
-        EnvConfig: {
-            ApiBaseUrl: 'https://develop-cmp-api.adzpier-staging.com',
-            EndPoint: '/api/v1/consent-preference/newsletter/:pid',
-            Env: 'development'
-        }
+        
     };
-    window.AZSocial.init(NewsLetterConfiguration)
-    window.AZSocial.show();
-    // window.AZSocial.init({
-    //   type:"sidebar", //banner,sidebar,bottom
-    //   display: true,
-    //   body: "My body"
-    // })
+    window.AZSocial.init(SocialIconConfiguration);
+})
     // window.AZSocial.show();
+ 
 
-    var btn = document.getElementById('toggleButn');
+    // var btn = document.getElementById('toggleButn');
 
-    let loggle = true;
-    btn.onclick = function () {
-        loggle = !loggle
-        if (loggle) {
-            window.AZSocial.show();
-        } else {
-            window.AZSocial.hide();
-        }
-    }
+    // let toggle = true;
+    // btn.onclick = function () {
+    //     toggle = !toggle
+    //     if (loggle) {
+    //         window.AZSocial.show();
+    //     } else {
+    //         window.AZSocial.hide();
+    //     }
+    // }
 
 </script>
 </body>
